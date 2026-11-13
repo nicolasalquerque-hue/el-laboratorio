@@ -33,7 +33,7 @@ export function viewShare() {
     <div class="home-head">
       <p class="eyebrow">Compartir</p>
       <h1>Lleva El Laboratorio al aula</h1>
-      <p class="lede">Mientras este computador esté encendido y en la misma red, tus estudiantes entran desde su celular o portátil abriendo una dirección.</p>
+      <p class="lede" id="shareLede">Tus estudiantes entran desde su celular o portátil abriendo una dirección.</p>
     </div>
     <div id="host"><div class="skeleton" style="height:200px"></div></div>`;
 
@@ -47,6 +47,12 @@ export function viewShare() {
     const urls = net.urls && net.urls.length ? net.urls : [current];
     const primary = publico || urls[0];
     const esPublico = !!publico;
+    const lede = el.querySelector('#shareLede');
+    if (lede) {
+      lede.textContent = esPublico
+        ? 'Tu laboratorio está publicado en internet: funciona a cualquier hora, desde cualquier red y sin depender de tu computador.'
+        : 'Mientras este computador esté encendido y en la misma red, tus estudiantes entran desde su celular o portátil abriendo una dirección.';
+    }
 
     host.innerHTML = `
       <div class="grid-2" style="align-items:start">
@@ -63,7 +69,7 @@ export function viewShare() {
               : 'Los dispositivos deben estar en la <strong>misma red Wi‑Fi</strong> que este computador.'}</div>
           </div>
           ${urls.length > 1 ? `<p class="small muted" style="margin:12px 0 0">Otras direcciones de esta máquina: ${urls.slice(1).map((u) => `<code class="mono">${esc(u)}</code>`).join(', ')}</p>` : ''}
-          <p class="small muted" style="margin:12px 0 0">Si no abre, revisa el firewall de Windows (puerto 8099). Abajo tienes el comando exacto.</p>
+          ${esPublico ? '' : '<p class="small muted" style="margin:12px 0 0">Si no abre, revisa el firewall de Windows (puerto 8099). Abajo tienes el comando exacto.</p>'}
         </div>
         <div class="card card--pad" style="text-align:center">
           <p class="eyebrow">Escanea con el celular</p>
