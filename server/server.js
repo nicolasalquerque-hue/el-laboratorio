@@ -411,7 +411,12 @@ async function api(req, res, pathname, query) {
         if (n && n.family === 'IPv4' && !n.internal) urls.push(`http://${n.address}:${PORT}`);
       }
     }
-    return ok(res, { urls, port: PORT, host: HOST });
+    // detrás de un proxy (Render, Fly…) el host público viene en las cabeceras
+    const proto = String(req.headers['x-forwarded-proto'] || 'http').split(',')[0].trim();
+    const host = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
+    const esPublico = host && !/^(localhost|127\.0\.0\.1|\[::1\]|192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host);
+    const publicUrl = esPublico ? `${proto}://${host}` : null;
+    return ok(res, { urls, publicUrl, port: PORT, host: HOST });
   }
 
   if (pathname === '/api/config' && method === 'GET') {
