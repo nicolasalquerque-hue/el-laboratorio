@@ -1,0 +1,13 @@
+{
+  "name": "el-laboratorio",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Laboratorio matemático interactivo para estudiantes de bachillerato",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

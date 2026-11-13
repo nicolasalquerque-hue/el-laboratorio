@@ -1,0 +1,27 @@
+# Render: despliegue en un paso desde el repositorio.
+# Plan "starter" con disco persistente para que no se pierdan las cuentas ni el progreso.
+services:
+  - type: web
+    name: el-laboratorio
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: ""
+    startCommand: node server/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 24.0.0
+      - key: DATA_DIR
+        value: /var/data
+      # Para activar el acceso con Google, descomenta y pon tus credenciales:
+      # - key: GOOGLE_CLIENT_ID
+      #   sync: false
+      # - key: GOOGLE_CLIENT_SECRET
+      #   sync: false
+      # - key: OAUTH_REDIRECT
+      #   value: https://TU-DOMINIO.onrender.com/api/auth/google/callback
+    disk:
+      name: datos
+      mountPath: /var/data
+      sizeGB: 1

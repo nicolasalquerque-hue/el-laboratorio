@@ -1,0 +1,190 @@
+/* app2.css — v1.1: fichas continuas, insignias, escenas animadas, logros */
+.board {
+  background-image:
+    linear-gradient(to right, rgba(25, 23, 20, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(25, 23, 20, 0.055) 1px, transparent 1px),
+    linear-gradient(to right, rgba(25, 23, 20, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(25, 23, 20, 0.09) 1px, transparent 1px);
+  background-size:
+    var(--grid, 9px) var(--grid, 9px),
+    var(--grid, 9px) var(--grid, 9px),
+    var(--unit, 36px) var(--unit, 36px),
+    var(--unit, 36px) var(--unit, 36px);
+}
+
+.tile { z-index: 2; }
+.tile--sel { outline: 2px solid rgba(180, 68, 44, 0.85); outline-offset: 1px; z-index: 4; }
+.tile__del {
+  position: absolute;
+  top: 2px; right: 2px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  display: grid; place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 140ms var(--ease), background 140ms var(--ease);
+  padding: 0;
+}
+.tile:hover .tile__del, .tile--sel .tile__del { opacity: 1; }
+.tile__del:hover { background: rgba(180, 68, 44, 0.95); }
+@media (hover: none) { .tile__del { opacity: 0.85; width: 20px; height: 20px; } }
+
+.tile__label { pointer-events: none; }
+
+.catalog { display: flex; flex-direction: column; gap: 10px; }
+.catalog__group { display: flex; flex-direction: column; gap: 6px; }
+.catalog__title { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+.catalog__row { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-tile {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 9px; border-radius: 10px;
+  border: 1px solid var(--line-2); background: #fffdf9;
+  font-size: 11.5px; font-family: var(--font-mono); color: var(--ink-2);
+  cursor: grab; touch-action: none; user-select: none;
+  transition: transform 140ms var(--ease), border-color 140ms var(--ease), background 140ms var(--ease);
+}
+.chip-tile:hover { transform: translateY(-1px); border-color: rgba(25, 23, 20, 0.22); background: var(--paper-2); }
+.chip-tile svg { display: block; }
+
+/* banca en columna para el lienzo */
+.bank--wide { width: 150px; }
+@media (max-width: 860px) { .bank--wide { width: auto; } }
+
+/* ---------------- insignias SVG ---------------- */
+.medal-svg { display: block; }
+.medal-wrap { position: relative; display: inline-grid; place-items: center; }
+.medal-wrap--locked { filter: grayscale(1); opacity: 0.42; }
+.seal-in { animation: seal 720ms cubic-bezier(0.2, 1.4, 0.35, 1) both; }
+@keyframes seal {
+  0% { transform: scale(1.9) rotate(-14deg); opacity: 0; }
+  55% { transform: scale(0.94) rotate(3deg); opacity: 1; }
+  78% { transform: scale(1.04) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.medal-modal { display: grid; place-items: center; gap: 10px; text-align: center; padding: 8px 0 4px; }
+
+.achievement-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.achievement {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 14px; border-radius: var(--r-lg);
+  border: 1px solid var(--line-2); background: #fffdf9;
+  transition: transform 220ms var(--ease), box-shadow 220ms var(--ease);
+}
+.achievement:hover { transform: translateY(-2px); box-shadow: var(--sh-1); }
+.achievement--locked { background: var(--paper-2); }
+.achievement--locked .achievement__name { color: var(--ink-3); }
+.achievement__name { font-weight: 500; font-size: 14px; }
+.achievement__how { font-size: 12px; color: var(--ink-3); margin-top: 2px; line-height: 1.4; }
+.achievement__date { font-size: 11px; color: var(--sage); margin-top: 4px; }
+
+/* ---------------- decoración indie ---------------- */
+.doodle { position: absolute; pointer-events: none; opacity: 0.5; }
+.home-hero { position: relative; overflow: hidden; }
+.home-hero .doodle--1 { top: 12px; right: 18px; width: 74px; }
+.home-hero .doodle--2 { bottom: 8px; left: 14px; width: 56px; opacity: 0.35; }
+.menu__art {
+  display: flex; gap: 6px; align-items: flex-end;
+  padding: 8px 12px 4px; opacity: 0.5;
+}
+
+/* ---------------- escenas animadas ---------------- */
+.scene {
+  position: relative;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: linear-gradient(180deg, #f7f3ea 0%, #f1ebdf 100%);
+  border: 1px solid var(--line-2);
+  min-height: 190px;
+}
+.scene svg { display: block; width: 100%; height: auto; }
+.scene__caption {
+  position: absolute; left: 12px; top: 10px;
+  font-size: 12px; color: var(--ink-2);
+  background: rgba(255, 253, 249, 0.86);
+  border: 1px solid var(--line-2);
+  padding: 4px 10px; border-radius: 999px;
+  backdrop-filter: blur(4px);
+}
+
+/* coche */
+.car-body { transition: transform 420ms cubic-bezier(0.22, 0.9, 0.24, 1); transform-origin: center bottom; }
+.wind line { stroke-dasharray: 14 10; animation: wind 0.9s linear infinite; }
+@keyframes wind { to { stroke-dashoffset: -24; } }
+.wind--fast line { animation-duration: 0.45s; }
+.wind--slow line { animation-duration: 1.6s; }
+
+/* obreros — transform-box evita que el giro pivote sobre el origen del SVG */
+.worker {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: walk 760ms ease-in-out infinite;
+  will-change: transform;
+}
+.worker--2 { animation-delay: 120ms; }
+.worker--3 { animation-delay: 240ms; }
+.worker--4 { animation-delay: 60ms; }
+@keyframes walk {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  22% { transform: translate(0.4px, -1.3px) rotate(-1.1deg); }
+  55% { transform: translate(0, 0) rotate(0deg); }
+  78% { transform: translate(0.4px, -1.3px) rotate(1.1deg); }
+}
+.worker-enter { animation: workerIn 520ms cubic-bezier(0.2, 1.2, 0.35, 1) both; }
+@keyframes workerIn {
+  from { transform: translateX(-46px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.brick { transition: transform 300ms var(--ease), opacity 300ms var(--ease); transform-origin: center; }
+.brick--new { animation: brickDrop 360ms cubic-bezier(0.2, 1.3, 0.4, 1) both; }
+@keyframes brickDrop {
+  from { transform: translateY(-14px) scale(0.8); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* mapa */
+.map-line { stroke-dasharray: 6 7; animation: dash 2.4s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -26; } }
+.map-pin { transform-origin: center bottom; transition: transform 420ms cubic-bezier(0.22, 0.9, 0.24, 1); }
+
+/* mesa */
+.plate-item { transform-origin: center; animation: plateIn 460ms cubic-bezier(0.2, 1.2, 0.35, 1) both; }
+@keyframes plateIn {
+  from { transform: translate(var(--dx, 40px), 18px) scale(0.6); opacity: 0; }
+  to { transform: translate(0, 0) scale(1); opacity: 1; }
+}
+.plate-item--out { animation: plateOut 320ms var(--ease) both; }
+@keyframes plateOut {
+  to { transform: translate(var(--dx, 40px), 14px) scale(0.55); opacity: 0; }
+}
+
+/* modo libre */
+.free-banner {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 14px; border-radius: var(--r);
+  background: var(--gold-wash); border: 1px solid rgba(184, 134, 42, 0.26);
+  color: #7d5a14; font-size: 13px;
+}
+.step--link { cursor: pointer; }
+.step--link:hover { color: var(--ink); }
+
+/* en pantallas pequeñas el lienzo va primero */
+@media (max-width: 860px) {
+  .board-wrap { display: flex; flex-direction: column; }
+  .board-wrap #boardHost { order: 1; }
+  .board-wrap .bank--wide { order: 2; width: auto; }
+}
+
+
+/* ilustración de la cabecera con sesión */
+.doodle--head { position: absolute; right: 6px; top: -10px; width: 116px; opacity: .95; }
+.doodle--head2 { position: absolute; right: 128px; top: 4px; width: 26px; opacity: .55; }
+@media (max-width: 640px) { .doodle--head { display: none; } .doodle--head2 { display: none; } }
+
+
+/* QR de la pantalla Compartir */
+#qrBox svg { width: 100%; max-width: 232px; height: auto; display: block; }

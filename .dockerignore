@@ -1,0 +1,10 @@
+node_modules
+data
+shots
+tools/bin
+tools
+*.md
+.git
+.env
+iniciar.cmd
+compartir-internet.cmd

@@ -1,2 +1,6 @@
 node_modules
 data/
+shots/
+tools/bin/
+*.log
+.env
