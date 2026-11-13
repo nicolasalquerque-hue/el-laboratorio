@@ -43,8 +43,10 @@ export function viewShare() {
     let net = { urls: [] };
     try { net = await api.get('/network'); } catch { /* seguimos con la del navegador */ }
     const current = location.origin;
+    const publico = net.publicUrl || null;
     const urls = net.urls && net.urls.length ? net.urls : [current];
-    const primary = urls[0];
+    const primary = publico || urls[0];
+    const esPublico = !!publico;
 
     host.innerHTML = `
       <div class="grid-2" style="align-items:start">
@@ -56,7 +58,9 @@ export function viewShare() {
           </div>
           <div class="notice notice--info" style="margin-top:14px">
             ${icon('target', 16)}
-            <div>Los dispositivos deben estar en la <strong>misma red Wi‑Fi</strong> que este computador.</div>
+            <div>${esPublico
+              ? 'Este enlace funciona desde cualquier red: compártelo tal cual, sin importar dónde estén.'
+              : 'Los dispositivos deben estar en la <strong>misma red Wi‑Fi</strong> que este computador.'}</div>
           </div>
           ${urls.length > 1 ? `<p class="small muted" style="margin:12px 0 0">Otras direcciones de esta máquina: ${urls.slice(1).map((u) => `<code class="mono">${esc(u)}</code>`).join(', ')}</p>` : ''}
           <p class="small muted" style="margin:12px 0 0">Si no abre, revisa el firewall de Windows (puerto 8099). Abajo tienes el comando exacto.</p>
@@ -78,7 +82,7 @@ export function viewShare() {
         </ol>
       </div>
 
-      <div class="card card--pad" style="margin-top:16px">
+      <div class="card card--pad ${esPublico ? 'hidden' : ''}" style="margin-top:16px">
         <div class="row row--between" style="gap:10px;flex-wrap:wrap">
           <div>
             <p class="eyebrow" style="margin-bottom:2px">Fuera de la red del colegio</p>
@@ -98,9 +102,13 @@ export function viewShare() {
       </div>
 
       <div class="card card--pad" style="margin-top:16px">
-        <p class="eyebrow">Si un estudiante no puede entrar</p>
+        <p class="eyebrow">${esPublico ? 'Nota sobre el plan gratuito' : 'Si un estudiante no puede entrar'}</p>
         <div class="stack stack--sm">
-          <div class="notice">
+          ${esPublico ? `<div class="notice">
+            ${icon('lock', 16)}
+            <div>En el plan gratuito el servidor <strong>se duerme</strong> tras 15 minutos sin visitas (la primera carga tarda ~30 s) y <strong>la base se borra</strong> en cada reinicio.</div>
+          </div>` : ''}
+          <div class="notice ${esPublico ? 'hidden' : ''}">
             ${icon('shield', 16)}
             <div><strong>Firewall.</strong> Windows puede bloquear el puerto. Ejecuta esto en PowerShell <em>como administrador</em> una sola vez:</div>
           </div>
